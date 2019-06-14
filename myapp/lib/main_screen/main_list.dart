@@ -1,7 +1,6 @@
 import 'MockData.dart';
 import 'package:flutter/material.dart';
-import 'dart:math';
-import 'package:english_words/english_words.dart';
+
 
 class MainList extends StatelessWidget {
   final List<String> dataName;

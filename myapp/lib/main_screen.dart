@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'MockData.dart';
-import 'DataScreen.dart';
 import 'package:english_words/english_words.dart';
-import 'dart:math';
+
+import 'main_screen/main_list.dart';
 
 void main() {
 /*
@@ -14,8 +13,6 @@ void main() {
   runApp(MainScreen());
 }
 
-//TODO Mainscreen with Appbar Body And Floating Action Button
-//TODO ListView with Mock Data
 class MainScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -28,8 +25,16 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
-    /*data.dataName.add(*/ /*WordPair.random(maxSyllables: 5).asPascalCase*/ /*"BOBO");
-    data.dataValue.add(data.dataName.length);*/
+  }
+
+  Widget _floatingActionButton() {
+    return FloatingActionButton(onPressed: () {
+      setState(() {
+        data.dataName
+            .add(WordPair.random(maxSyllables: 5).asPascalCase);
+        data.dataValue.add(data.dataName.length);
+      });
+    });
   }
 
   Widget build(BuildContext context) {
@@ -42,13 +47,7 @@ class _MainScreenState extends State<MainScreen> {
           dataName: data.dataName,
           dataValue: data.dataValue,
         ),
-        floatingActionButton: FloatingActionButton(onPressed: () {
-          setState(() {
-            data.dataName
-                .add("BOBO" /*WordPair.random(maxSyllables: 5).asPascalCase*/);
-            data.dataValue.add(data.dataName.length);
-          });
-        }),
+        floatingActionButton: _floatingActionButton(),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       ),
     );
