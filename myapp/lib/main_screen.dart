@@ -32,7 +32,8 @@ class _MainScreenState extends State<MainScreen> {
       setState(() {
         data.dataName
             .add(WordPair.random(maxSyllables: 5).asPascalCase);
-        data.dataValue.add(data.dataName.length);
+        data.dataValue.add(data.dataName.length -1);
+        MainList(dataName: data.dataName,dataValue: data.dataValue);
       });
     });
   }

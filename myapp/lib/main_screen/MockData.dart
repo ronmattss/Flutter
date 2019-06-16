@@ -6,15 +6,27 @@ import 'package:myapp/detail_page/detail_screen.dart';
 class MockData extends StatelessWidget {
   final String sampleName;
   final int sampleValue;
+  final Function sampleDelete;
 
   MockData({
     this.sampleName,
     this.sampleValue,
+    this.sampleDelete,
   })  : assert(sampleValue != null),
-        assert(sampleName != null);
+        assert(sampleName != null),
+        assert(sampleDelete != null);
 
-  void gotoDetailScreen(BuildContext context) {
-    Navigator.push( context, MaterialPageRoute(builder: (BuildContext context) => DetailScreen(sampleName)));
+  void gotoDetailScreen(BuildContext context, String dataTitle, int dataId) {
+    Navigator.push<bool>(
+        context,
+        MaterialPageRoute(
+            builder: (BuildContext context) =>
+                DetailScreen(dataTitle, dataId))).then((bool value) {
+      if (value) {
+        print(dataId);
+        sampleDelete(dataId);
+      }
+    });
   }
 
   @override
@@ -23,7 +35,7 @@ class MockData extends StatelessWidget {
     return Material(
         type: MaterialType.transparency,
         child: GestureDetector(
-            onTap: () => ({gotoDetailScreen(context)}),
+            onTap: () => gotoDetailScreen(context, sampleName, sampleValue),
             child: Container(
               color: Colors.red,
               child: Column(
