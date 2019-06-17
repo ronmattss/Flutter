@@ -8,12 +8,12 @@ class MainList extends StatefulWidget {
   MainList({@required this.dataName, @required this.dataValue});
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return _MainListState();
   }
 }
 
 class _MainListState extends State<MainList> {
+  
   void deleteData(int index) {
    if(index == widget.dataName.length)
    {
