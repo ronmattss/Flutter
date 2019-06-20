@@ -8,11 +8,12 @@ import 'package:myapp/main_screen/main_screen.dart';
 
 //Instantiate Task class to access it's properties, it will be saved at the database after its implementation
 // save to database then load it in the MainList
+// needs category
 
 class CreateTaskScreen extends StatefulWidget {
   final Data data;
   final Function addData;
-  CreateTaskScreen(this.data,this.addData);
+  CreateTaskScreen(this.data, this.addData);
   @override
   State<StatefulWidget> createState() => _CreateTaskScreenState();
 }
@@ -21,37 +22,55 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
   String titleValue;
   String descriptionValue;
 
+  void validateEntry() {
+    if ( titleValue == null) {
+
+     showDialog(builder : (BuildContext context){ return _alertDialog();},context: context);
+    } else {
+      widget.addData(titleValue);
+      Navigator.pop(context, true);
+      
+    }
+  }
+
+  Widget _alertDialog() {
+    return AlertDialog(
+      title: Text("Please Enter something"),
+      actions: <Widget>[
+         FlatButton(
+          child: Text("Ok"),
+          onPressed: () => Navigator.pop(context, false),
+        )
+      ],
+    );
+  }
+
   Widget _buildBody() {
     return Container(
       child: Column(
         children: <Widget>[
-          Text("Title Field Placeholder"), // dk if it is appropriate or not
+          // dk if it is appropriate or not
           TextField(
-            decoration: InputDecoration(helperText: "Title"),
+            decoration: InputDecoration(labelText: "Title"),
             autofocus: false,
             autocorrect: false,
           ),
-          Text("Description Field Placeholder"),
           TextField(
-            decoration: InputDecoration(helperText: "Title"),
+            decoration: InputDecoration(labelText: "Description"),
             autofocus: false,
             autocorrect: false,
-            maxLines: 5,
+            maxLines: 3,
             onChanged: (String value) {
               setState(() {
                 titleValue = value;
+                
               });
             },
           ),
           FlatButton(
               child: Text("Save"),
               onPressed: () => ({
-                    print(titleValue),
-                    widget.addData(titleValue),
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) => MainScreen()),result: true)
+                    validateEntry() // can be replaced to any data type
                   }))
         ],
       ),

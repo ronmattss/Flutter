@@ -6,6 +6,9 @@ import '../create_page/create_screen.dart';
 import '../helper_classes/data.dart';
 import '../detail_page/detail_screen.dart';
 
+// Data will be changed to a database entry 
+// A profile for the user to 
+
 void main() {
 /*
   Data someData = new Data();
@@ -76,7 +79,7 @@ class _MainScreenState extends State<MainScreen> {
                 addData();
                 print(widget.data.dataName.length);                
                 _mainBodyBuild(context);
-                print("TANGA ito na title mo: " + widget.data.dataName[widget.data.dataName.length-1]);
+               // print("Ttitle: " + widget.data.dataName[widget.data.dataName.length-1]);
               }
             })
         }),),

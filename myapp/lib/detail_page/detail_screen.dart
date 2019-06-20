@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 //task class should retrieve ID from database based on the given string or int id which in return will be displayed on the screen
 // database will hold id title description icon color (or whatever)
 // should make a delete button and save button
+// Detail screen should contain an edit button
 
 class DetailScreen extends StatelessWidget {
   final String task;
@@ -33,7 +34,7 @@ class DetailScreen extends StatelessWidget {
             child: Row(mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             FlatButton(
-              child: Text("Dis nutz"),
+              child: Text("Delete"),
               onPressed: () => {
                 Navigator.pop(context,true)
               },
