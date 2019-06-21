@@ -13,14 +13,16 @@ import 'package:flutter/material.dart';
 
 class DetailScreen extends StatelessWidget {
   final String task;
+  final String description;
+  final String category;
   final int taskId;
 
-  DetailScreen(this.task,this.taskId);
+  DetailScreen(this.task,this.description,this.category,this.taskId);
 
   // builds
   Widget _buildAppBar() {
     return AppBar(
-      title: Text(task),
+      title: Text(task + " " + category),
     );
   }
 
@@ -28,8 +30,7 @@ class DetailScreen extends StatelessWidget {
     return Column(
       children: <Widget>[
         Text("Description"),
-        Text(
-            "A random word: " + WordPair.random(maxSyllables: 20).asPascalCase),
+        Text(description),
         Container(child: Center(
             child: Row(mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[

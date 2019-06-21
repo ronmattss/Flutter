@@ -3,17 +3,13 @@
 // another route from main then
 import "package:flutter/material.dart";
 
-import "package:myapp/helper_classes/data.dart";
-import 'package:myapp/main_screen/main_screen.dart';
-
 //Instantiate Task class to access it's properties, it will be saved at the database after its implementation
 // save to database then load it in the MainList
 // needs category
 
 class CreateTaskScreen extends StatefulWidget {
-  final Data data;
   final Function addData;
-  CreateTaskScreen(this.data, this.addData);
+  CreateTaskScreen(this.addData);
   @override
   State<StatefulWidget> createState() => _CreateTaskScreenState();
 }
@@ -21,15 +17,18 @@ class CreateTaskScreen extends StatefulWidget {
 class _CreateTaskScreenState extends State<CreateTaskScreen> {
   String titleValue;
   String descriptionValue;
+  String category = "Uncategorized";
 
   void validateEntry() {
-    if ( titleValue == null) {
-
-     showDialog(builder : (BuildContext context){ return _alertDialog();},context: context);
+    if (titleValue == null && descriptionValue == null) {
+      showDialog(
+          builder: (BuildContext context) {
+            return _alertDialog();
+          },
+          context: context);
     } else {
-      widget.addData(titleValue);
+      widget.addData(titleValue, descriptionValue,category);
       Navigator.pop(context, true);
-      
     }
   }
 
@@ -37,7 +36,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
     return AlertDialog(
       title: Text("Please Enter something"),
       actions: <Widget>[
-         FlatButton(
+        FlatButton(
           child: Text("Ok"),
           onPressed: () => Navigator.pop(context, false),
         )
@@ -46,7 +45,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
   }
 
   Widget _buildBody() {
-    return Container(
+    return Container(margin: EdgeInsets.all(10.0),
       child: Column(
         children: <Widget>[
           // dk if it is appropriate or not
@@ -54,6 +53,11 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
             decoration: InputDecoration(labelText: "Title"),
             autofocus: false,
             autocorrect: false,
+            onChanged: (String value) {
+              setState(() {
+                titleValue = value;
+              });
+            },
           ),
           TextField(
             decoration: InputDecoration(labelText: "Description"),
@@ -62,10 +66,24 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
             maxLines: 3,
             onChanged: (String value) {
               setState(() {
-                titleValue = value;
-                
+                descriptionValue = value;
               });
             },
+          ),
+          DropdownButton<String>(
+            onChanged: (String newValue) {
+              setState(() {
+                category = newValue;
+              });
+            },
+            value: category,
+            items: <String>["Uncategorized","Important", "Casual Task"]
+                .map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
           ),
           FlatButton(
               child: Text("Save"),

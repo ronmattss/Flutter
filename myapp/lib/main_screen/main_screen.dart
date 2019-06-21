@@ -6,8 +6,8 @@ import '../create_page/create_screen.dart';
 import '../helper_classes/data.dart';
 import '../detail_page/detail_screen.dart';
 
-// Data will be changed to a database entry 
-// A profile for the user to 
+// Data will be changed to a database entry
+// A profile for the user to
 
 void main() {
 /*
@@ -28,80 +28,75 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
- 
   String title;
+  String description;
+  String category;
   @override
   void initState() {
     print(widget.data.dataName);
     super.initState();
   }
 
-  void gotoCreateTaskPage()
-  {
-     Navigator.push(
+  void gotoCreateTaskPage() {
+    Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (BuildContext context) => CreateTaskScreen(widget.data,setTitle)));
+            builder: (BuildContext context) =>
+                CreateTaskScreen(setTitleDescription)));
   }
 
-  void setTitle(String valueOfTitle)
-  {
+  void setTitleDescription(
+      String valueOfTitle, String valueOfDescription, String valueOfCategory) {
     title = valueOfTitle;
+    description = valueOfDescription;
+    category = valueOfCategory;
   }
 
-  void addData()
-  {
-     widget. data.dataName.add(title);
-     widget. data.dataValue.add(widget.data.dataName.length - 1);
+  void addData() {
+    widget.data.dataName.add(title);
+    widget.data.dataDescription.add(description);
+    widget.data.dataCategory.add(category);
+    widget.data.dataValue.add(widget.data.dataName.length - 1);
   }
 
 // This will be replaced to create a route to the createTaskScreen
   // Widget _floatingActionButton() {
   //   return FloatingActionButton(onPressed: () => gotoCreateTaskPage());
   // }
-  Widget _mainBodyBuild(BuildContext context)
-  {
-   return Scaffold(
-        appBar: AppBar(
-          title: Text("Title Placeholder"),
-        ),
-        body: MainList(
-          dataName: widget.data.dataName,
-          dataValue: widget.data.dataValue,
-        ),
-        floatingActionButton: FloatingActionButton(onPressed:() => ({
-               Navigator.of(context).push<bool>(
-        MaterialPageRoute(
-            builder: (BuildContext context) => (CreateTaskScreen(widget.data,setTitle)))).then((bool value)
-            {
-              if(value)
-              {
-                addData();
-                print(widget.data.dataName.length);                
-                _mainBodyBuild(context);
-               // print("Ttitle: " + widget.data.dataName[widget.data.dataName.length-1]);
-              }
-            })
-        }),),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      );
+  Widget _mainBodyBuild(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Title Placeholder"),
+      ),
+      body: MainList(
+        dataName: widget.data.dataName,
+        dataValue: widget.data.dataValue,
+        dataCategory: widget.data.dataCategory,
+        dataDescription: widget.data.dataDescription,
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => ({
+              Navigator.of(context)
+                  .push<bool>(MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          (CreateTaskScreen(setTitleDescription))))
+                  .then((bool value) {
+                if (value) {
+                  addData();
+                  print(widget.data.dataName.length);
+                  _mainBodyBuild(context);
+                }
+              })
+            }),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+    );
   }
 
   Widget build(BuildContext context) {
     return MaterialApp(
-      home:Builder(builder: (context) => _mainBodyBuild(context),)
-    );
+        home: Builder(
+      builder: (context) => _mainBodyBuild(context),
+    ));
   }
 }
-
-
-
-
-// /**{
-//       setState(() {
-//         data.dataName
-//             .add(WordPair.random(maxSyllables: 5).asPascalCase);
-//         data.dataValue.add(data.dataName.length -1);
-//         MainList(dataName: data.dataName,dataValue: data.dataValue);
-//       });
-//     } *//

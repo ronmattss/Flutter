@@ -1,27 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/detail_page/detail_screen.dart';
 
-//TODO Change this to StateFulWIdget so that on tap can
-// this should have a setState() Function
+
 class MockData extends StatelessWidget {
   final String sampleName;
+  final String sampleDescription;
+  final String sampleCategory;
   final int sampleValue;
   final Function sampleDelete;
 
   MockData({
     this.sampleName,
+    this.sampleDescription,
     this.sampleValue,
+    this.sampleCategory,
     this.sampleDelete,
   })  : assert(sampleValue != null),
         assert(sampleName != null),
+        assert(sampleDescription != null),
+        assert(sampleCategory != null),
         assert(sampleDelete != null);
 
-  void gotoDetailScreen(BuildContext context, String dataTitle, int dataId) {
+  void gotoDetailScreen(BuildContext context, String dataTitle,String dataDescription,String dataCategory, int dataId) {
     Navigator.push<bool>(
         context,
         MaterialPageRoute(
             builder: (BuildContext context) =>
-                DetailScreen(dataTitle, dataId))).then((bool value) {
+                DetailScreen(dataTitle,dataDescription,dataCategory, dataId))).then((bool value) {
       if (value) {
         print(dataId);
         sampleDelete(dataId);
@@ -34,12 +39,12 @@ class MockData extends StatelessWidget {
     return Material(
         type: MaterialType.transparency,
         child: GestureDetector(
-            onTap: () => gotoDetailScreen(context, sampleName, sampleValue),
+            onTap: () => gotoDetailScreen(context, sampleName,sampleDescription,sampleCategory, sampleValue),
             child: Container(
-              color: Colors.red,
+              color: Colors.blueAccent,
               child: Column(
                 children: <Widget>[
-                  Text("Name: $sampleName Value: $sampleValue"),
+                  Text("ID:$sampleValue Title: $sampleName Description: $sampleDescription"),
                 ],
               ),
               padding: EdgeInsets.all(16.0),
