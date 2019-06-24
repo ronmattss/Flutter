@@ -2,6 +2,7 @@ import 'MockData.dart';
 import 'package:flutter/material.dart';
 
 // I think we can call the data Class here
+// I want a profile for the user, locally saved first :)
 class MainList extends StatefulWidget {
   final List<String> dataName;
   final List<String> dataDescription;
@@ -47,7 +48,7 @@ class _MainListState extends State<MainList> {
 
   Widget _buildMockDataList(BuildContext context, int index) {
     return Card(
-      child: MockData(
+      child: MockData(                  // this will be replaced by data on a local database
         sampleName: widget.dataName[index],
         sampleValue: widget.dataValue[index],
         sampleDescription: widget.dataDescription[index],

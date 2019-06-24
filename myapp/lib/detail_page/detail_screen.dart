@@ -1,4 +1,3 @@
-import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 
 //What is this page?
@@ -22,15 +21,21 @@ class DetailScreen extends StatelessWidget {
   // builds
   Widget _buildAppBar() {
     return AppBar(
-      title: Text(task + " " + category),
+      title: Text(task + " " + category),actions: <Widget>[FlatButton(child: (Icon(Icons.edit,color: Colors.white,)),onPressed: (){},)],
     );
   }
 
   Widget _buildBody(BuildContext context) {
+    int year = new DateTime.now().year;
+    int day = new DateTime.now().day;
+    int month = new DateTime.now().month;
+    String date = (month.toString() +"-" + day.toString() + "-" + year.toString()); 
     return Column(
       children: <Widget>[
-        Text("Description"),
-        Text(description),
+        Text("Title: $task"),
+        Text("Category: $category"),
+        Text("Description: $description"),
+        Text("Date: $date"),
         Container(child: Center(
             child: Row(mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -41,7 +46,7 @@ class DetailScreen extends StatelessWidget {
               },
             ),
             FlatButton(
-              child: Text("Diznt Nutz"),
+              child: Text("IDK WAT IS DIZ"),
               onPressed: () => {},
             )
           ],
