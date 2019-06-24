@@ -106,6 +106,6 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
             appBar: AppBar(
               title: Text("Create Task"),
             ),
-            body: _buildBody()));
+            body: SingleChildScrollView(child:  _buildBody())));
   }
 }
