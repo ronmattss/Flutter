@@ -2,32 +2,37 @@
 // fields and shits
 // another route from main then
 import "package:flutter/material.dart";
+import 'package:myapp/helper_classes/crud.dart';
 
 //Instantiate Task class to access it's properties, it will be saved at the database after its implementation
 // save to database then load it in the MainList
 // needs category
 
 class CreateTaskScreen extends StatefulWidget {
-  final Function addData;
-  CreateTaskScreen(this.addData);
   @override
   State<StatefulWidget> createState() => _CreateTaskScreenState();
 }
 
 class _CreateTaskScreenState extends State<CreateTaskScreen> {
-  String titleValue;
-  String descriptionValue;
+  String task;
+  String description;
   String category = "Uncategorized";
+  DatabaseMethods dbm = new DatabaseMethods();
+
+
+   //Database Entry Function
+
 
   void validateEntry() {
-    if (titleValue == null && descriptionValue == null) {
+    if (task == null && description == null) {
       showDialog(
           builder: (BuildContext context) {
             return _alertDialog();
           },
           context: context);
     } else {
-      widget.addData(titleValue, descriptionValue,category);
+      dbm.insert(task, description, category);
+
       Navigator.pop(context, true);
     }
   }
@@ -55,7 +60,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
             autocorrect: false,
             onChanged: (String value) {
               setState(() {
-                titleValue = value;
+                task = value;
               });
             },
           ),
@@ -66,7 +71,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
             maxLines: 3,
             onChanged: (String value) {
               setState(() {
-                descriptionValue = value;
+                description = value;
               });
             },
           ),

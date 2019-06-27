@@ -1,9 +1,9 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import "package:sqflite/sqflite.dart";
 import "package:path_provider/path_provider.dart";
-
 
 class DatabaseHelper {
   static final _databaseName ="TaskDatabase.db";
@@ -11,7 +11,7 @@ class DatabaseHelper {
 
   static final table = "task_table";
 
-  static final columnId = '_id';
+  static final columnId = 'id';
   static final columnTask = "task";
   static final columnDescription ="description";
   static final columnCategory = "category";
@@ -63,6 +63,7 @@ class DatabaseHelper {
     return await db.query(table);
   }
 
+
   // All of the methods (insert, query, update, delete) can also be done using
   // raw SQL commands. This method uses a raw query to give the row count.
   Future<int> queryRowCount() async {
@@ -83,6 +84,13 @@ class DatabaseHelper {
   Future<int> delete(int id) async {
     Database db = await instance.database;
     return await db.delete(table, where: '$columnId = ?', whereArgs: [id]);
+
+    
+}
+
+Future deleteRow(int id) async{
+Database db = await instance.database;
+return await db.delete(table, where: '$columnId =?',whereArgs: [id]);
 }
 
 

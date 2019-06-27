@@ -1,5 +1,6 @@
 import 'MockData.dart';
 import 'package:flutter/material.dart';
+import 'package:myapp/helper_classes/data.dart';
 
 // I think we can call the data Class here
 // I want a profile for the user, locally saved first :)

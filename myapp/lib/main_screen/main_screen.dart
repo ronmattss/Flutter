@@ -1,26 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:english_words/english_words.dart';
 
 import '../main_screen/main_list.dart';
 import '../create_page/create_screen.dart';
 import '../helper_classes/data.dart';
-import '../detail_page/detail_screen.dart';
+import 'package:myapp/helper_classes/crud.dart';
+import 'package:myapp/helper_classes/data.dart';
 
 // Data will be changed to a database entry
 // A profile for the user to
 
 void main() {
-/*
-  Data someData = new Data();
-  someData.dataName.add(WordPair.random(maxSyllables: 10).asPascalCase);
-  someData.dataValue.add(someData.dataName.length);
-*/
-
   runApp(MainScreen());
 }
 
 class MainScreen extends StatefulWidget {
-  final Data data = new Data();
   @override
   State<StatefulWidget> createState() {
     return _MainScreenState();
@@ -31,9 +24,12 @@ class _MainScreenState extends State<MainScreen> {
   String title;
   String description;
   String category;
+  List dummyTask;
+  DatabaseMethods dbm = new DatabaseMethods();
+
   @override
   void initState() {
-    print(widget.data.dataName);
+    // print(data.dataList);
     super.initState();
   }
 
@@ -41,50 +37,52 @@ class _MainScreenState extends State<MainScreen> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (BuildContext context) =>
-                CreateTaskScreen(setTitleDescription)));
+            builder: (BuildContext context) => CreateTaskScreen()));
   }
 
-  void setTitleDescription(
-      String valueOfTitle, String valueOfDescription, String valueOfCategory) {
-    title = valueOfTitle;
-    description = valueOfDescription;
-    category = valueOfCategory;
+  Widget _buildFuture(BuildContext context) {
+    Data data = new Data();
+    return FutureBuilder(
+        future: data.getTasks(data.dataList),
+        initialData: data,
+        builder: (context, snapshot) {
+          return MainList(
+            dataName: data.dataName,
+            dataValue: data.dataValue,
+            dataCategory: data.dataCategory,
+            dataDescription: data.dataDescription,
+          );
+        });
   }
 
-  void addData() {
-    widget.data.dataName.add(title);
-    widget.data.dataDescription.add(description);
-    widget.data.dataCategory.add(category);
-    widget.data.dataValue.add(widget.data.dataName.length - 1);
-  }
-
-// This will be replaced to create a route to the createTaskScreen
-  // Widget _floatingActionButton() {
-  //   return FloatingActionButton(onPressed: () => gotoCreateTaskPage());
-  // }
   Widget _mainBodyBuild(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Title Placeholder"),
+        actions: <Widget>[
+          FlatButton(
+            child: Text("Debug Delete"),
+            onPressed: () {
+              DatabaseMethods dbm = new DatabaseMethods();
+              dbm.delete();
+              setState(() {
+                _buildFuture(context);
+              });
+            },
+          )
+        ],
       ),
-      body: MainList(
-        dataName: widget.data.dataName,
-        dataValue: widget.data.dataValue,
-        dataCategory: widget.data.dataCategory,
-        dataDescription: widget.data.dataDescription,
-      ),
+      body: _buildFuture(context),
       floatingActionButton: FloatingActionButton(
         onPressed: () => ({
               Navigator.of(context)
                   .push<bool>(MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          (CreateTaskScreen(setTitleDescription))))
+                      builder: (BuildContext context) => (CreateTaskScreen())))
                   .then((bool value) {
                 if (value) {
-                  addData();
-                  print(widget.data.dataName.length);
-                  _mainBodyBuild(context);
+                  setState(() {
+                    _mainBodyBuild(context);
+                  });
                 }
               })
             }),

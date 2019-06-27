@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/detail_page/detail_screen.dart';
+import 'package:myapp/helper_classes/crud.dart';
 
 
 class MockData extends StatelessWidget {
@@ -14,14 +15,15 @@ class MockData extends StatelessWidget {
     this.sampleDescription,
     this.sampleValue,
     this.sampleCategory,
-    this.sampleDelete,
-  })  : assert(sampleValue != null),
-        assert(sampleName != null),
-        assert(sampleDescription != null),
-        assert(sampleCategory != null),
-        assert(sampleDelete != null);
+    this.sampleDelete});
+  // })  : assert(sampleValue != null),
+  //       assert(sampleName != null),
+  //       assert(sampleDescription != null),
+  //       assert(sampleCategory != null),
+  //       assert(sampleDelete != null);
 
   void gotoDetailScreen(BuildContext context, String dataTitle,String dataDescription,String dataCategory, int dataId) {
+    DatabaseMethods dbm = new DatabaseMethods();
     Navigator.push<bool>(
         context,
         MaterialPageRoute(
@@ -29,7 +31,9 @@ class MockData extends StatelessWidget {
                 DetailScreen(dataTitle,dataDescription,dataCategory, dataId))).then((bool value) {
       if (value) {
         print(dataId);
-        sampleDelete(dataId);
+        sampleDelete(dataId); 
+        dbm.deleteRow(dataId);
+        build(context);        
       }
     });
   }
