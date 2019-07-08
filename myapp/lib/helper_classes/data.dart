@@ -1,6 +1,7 @@
 import 'crud.dart';
 
-class Data {
+class Data
+ {
   List<Map<String, dynamic>> dataList = <Map<String, dynamic>>[];
   List<String> dataName = <String>[];
   List<String> dataDescription = <String>[];
@@ -8,7 +9,8 @@ class Data {
   List<int> dataValue = <int>[];
 
   // retrieve data from query list
-  Future getTasks(List<Map> map) async {
+  Future getTasks(List<Map> map) async 
+  {
     DatabaseMethods dbm = new DatabaseMethods();
     dataList = await dbm.addToList();//print(map);
     map = dataList;
@@ -19,7 +21,8 @@ class Data {
 
 
   void assignToList(List<int> idList, List<String> tasks,
-      List<String> description, List<String> category)  {
+      List<String> description, List<String> category)  
+      {
     List<String> columns = <String>[];
 
     columns.add("id");
@@ -27,8 +30,10 @@ class Data {
     columns.add("description");
     columns.add("category");
 
-    for (var i = 0; i < columns.length; i++) {
-      for (var j = 0; j < dataList.length; j++) {
+    for (var i = 0; i < columns.length; i++) 
+    {
+      for (var j = 0; j < dataList.length; j++) 
+      {
         Map<String, dynamic> wat =
             Map.fromIterables(dataList[j].keys, dataList[j].values);
         switch (i) {

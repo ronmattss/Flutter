@@ -21,11 +21,6 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  String title;
-  String description;
-  String category;
-  List dummyTask;
-  DatabaseMethods dbm = new DatabaseMethods();
 
   @override
   void initState() {
@@ -46,12 +41,14 @@ class _MainScreenState extends State<MainScreen> {
         future: data.getTasks(data.dataList),
         initialData: data,
         builder: (context, snapshot) {
-          return MainList(
+           if(data.dataValue != null) return MainList(
             dataName: data.dataName,
             dataValue: data.dataValue,
             dataCategory: data.dataCategory,
             dataDescription: data.dataDescription,
           );
+          else
+           return Text("Wow no tasks");
         });
   }
 
@@ -64,7 +61,7 @@ class _MainScreenState extends State<MainScreen> {
             child: Text("Debug Delete"),
             onPressed: () {
               DatabaseMethods dbm = new DatabaseMethods();
-              dbm.delete();
+              dbm.selectCategory("Casual Task");
               setState(() {
                 _buildFuture(context);
               });

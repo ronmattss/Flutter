@@ -54,10 +54,13 @@ void insert(String task,String description,String category) async{
     print('deleted $rowsDeleted row(s): row $id');
 
 }
-void deleteRow(int id) async{
-  final deletedRow = await dbHelper.deleteRow(id);
-  print("Deleted Row: $deletedRow");
-
+  void deleteRow(int id) async{
+    final deletedRow = await dbHelper.deleteRow(id);
+    print("Deleted Row: $deletedRow");
 }
+  void selectCategory(String category) async{
+    final row = await dbHelper.selectCategory(category);
+    print(row);
+  }
 
 }

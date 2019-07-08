@@ -94,6 +94,7 @@ class DatabaseHelper {
     return await db.delete(table, where: '$columnId =?', whereArgs: [id]);
   }
 
+   //Query via category?
   Future selectCategory(String category) async {
     Database db = await instance.database;
     return await db.query(table, where: '$columnCategory =?',whereArgs: [category]);
