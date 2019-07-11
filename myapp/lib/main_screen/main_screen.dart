@@ -7,7 +7,7 @@ import 'package:myapp/helper_classes/crud.dart';
 import 'package:myapp/helper_classes/data.dart';
 
 // Data will be changed to a database entry
-// A profile for the user to
+// A profile for the user, shows tasks number
 
 void main() {
   runApp(MainScreen());
@@ -33,6 +33,12 @@ class _MainScreenState extends State<MainScreen> {
         context,
         MaterialPageRoute(
             builder: (BuildContext context) => CreateTaskScreen()));
+  }
+
+  Widget _buildProfile(BuildContext context)
+  {
+    // Container with a pic in the side current tasks and completed tasks on the other side
+    return Container();
   }
 
   Widget _buildFuture(BuildContext context) {
