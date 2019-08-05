@@ -65,7 +65,7 @@ class _MainListState extends State<MainList> {
   Widget build(BuildContext context) {
     return ListView.builder(
       itemBuilder: _buildMockDataList,
-      itemCount: widget.dataName.length,
+      itemCount: widget.dataName.length,shrinkWrap: true,
     );
   }
 }

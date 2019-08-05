@@ -34,6 +34,14 @@ void insert(String task,String description,String category) async{
      return maps;
    }
 
+   Future<List<Map<String, dynamic>>> addToFilteredList(String category) async{
+
+     List<Map<String,dynamic>> maps;
+     List<Map> dataList = await dbHelper.selectCategory(category);
+     maps = dataList;
+     return maps;
+   }
+
 
 
   void update(String task,String description,String category ) async {

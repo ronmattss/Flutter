@@ -21,7 +21,6 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-
   @override
   void initState() {
     // print(data.dataList);
@@ -35,10 +34,17 @@ class _MainScreenState extends State<MainScreen> {
             builder: (BuildContext context) => CreateTaskScreen()));
   }
 
-  Widget _buildProfile(BuildContext context)
-  {
-    // Container with a pic in the side current tasks and completed tasks on the other side
-    return Container();
+  Widget _buildProfile(BuildContext context) {
+    //left side pic right side some task summaries
+    return Container(
+      child: Row(children: <Widget>[
+        Container(
+          decoration: new BoxDecoration(
+            shape: BoxShape.circle,color: Colors.blueAccent
+          ),
+        ),
+      ]),
+    );
   }
 
   Widget _buildFuture(BuildContext context) {
@@ -47,14 +53,15 @@ class _MainScreenState extends State<MainScreen> {
         future: data.getTasks(data.dataList),
         initialData: data,
         builder: (context, snapshot) {
-           if(data.dataValue != null) return MainList(
-            dataName: data.dataName,
-            dataValue: data.dataValue,
-            dataCategory: data.dataCategory,
-            dataDescription: data.dataDescription,
-          );
+          if (data.dataValue != null)
+            return MainList(
+              dataName: data.dataName,
+              dataValue: data.dataValue,
+              dataCategory: data.dataCategory,
+              dataDescription: data.dataDescription,
+            );
           else
-           return Text("Wow no tasks");
+            return Text("Wow no tasks");
         });
   }
 
@@ -75,20 +82,20 @@ class _MainScreenState extends State<MainScreen> {
           )
         ],
       ),
-      body: _buildFuture(context),
+      body: Container(child: Column(children: <Widget>[_buildProfile(context),_buildFuture(context)],),), 
       floatingActionButton: FloatingActionButton(
         onPressed: () => ({
-              Navigator.of(context)
-                  .push<bool>(MaterialPageRoute(
-                      builder: (BuildContext context) => (CreateTaskScreen())))
-                  .then((bool value) {
-                if (value) {
-                  setState(() {
-                    _mainBodyBuild(context);
-                  });
-                }
-              })
-            }),
+          Navigator.of(context)
+              .push<bool>(MaterialPageRoute(
+                  builder: (BuildContext context) => (CreateTaskScreen())))
+              .then((bool value) {
+            if (value) {
+              setState(() {
+                _mainBodyBuild(context);
+              });
+            }
+          })
+        }),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );

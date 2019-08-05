@@ -24,7 +24,7 @@ class DetailScreen extends StatelessWidget {
       title: Text(task + " " + category),actions: <Widget>[FlatButton(child: (Icon(Icons.edit,color: Colors.white,)),onPressed: (){},)],
     );
   }
-
+  // to store date in the database convert it to int
   Widget _buildBody(BuildContext context) {
     int year = new DateTime.now().year;
     int day = new DateTime.now().day;
