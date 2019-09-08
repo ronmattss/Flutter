@@ -25,6 +25,7 @@ class DetailScreen extends StatelessWidget {
     );
   }
   // to store date in the database convert it to int
+  // edit page
   Widget _buildBody(BuildContext context) {
     int year = new DateTime.now().year;
     int day = new DateTime.now().day;

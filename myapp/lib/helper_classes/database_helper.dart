@@ -65,6 +65,9 @@ class DatabaseHelper {
     return await db.query(table);
   }
 
+
+
+
   // All of the methods (insert, query, update, delete) can also be done using
   // raw SQL commands. This method uses a raw query to give the row count.
   Future<int> queryRowCount() async {
@@ -87,6 +90,7 @@ class DatabaseHelper {
     Database db = await instance.database;
     return await db.delete(table, where: '$columnId = ?', whereArgs: [id]);
   }
+  
   //Deletes the selected row
   //Query via id
   Future deleteRow(int id) async {

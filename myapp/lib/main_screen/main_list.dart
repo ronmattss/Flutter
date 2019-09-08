@@ -1,6 +1,8 @@
+import 'package:myapp/helper_classes/crud.dart';
+
 import 'MockData.dart';
 import 'package:flutter/material.dart';
-import 'package:myapp/helper_classes/data.dart';
+import 'package:myapp/helper_classes/database_helper.dart';
 
 // I think we can call the data Class here
 // I want a profile for the user, locally saved first :)
@@ -10,11 +12,12 @@ class MainList extends StatefulWidget {
   final List<String> dataCategory;
   final List<int> dataValue;
 
-  MainList(
-      {@required this.dataName,
-      @required this.dataDescription,
-      @required this.dataCategory,
-      @required this.dataValue});
+  MainList({
+    @required this.dataName,
+    @required this.dataDescription,
+    @required this.dataCategory,
+    @required this.dataValue,
+  });
   @override
   State<StatefulWidget> createState() {
     return _MainListState();
@@ -22,6 +25,7 @@ class MainList extends StatefulWidget {
 }
 
 class _MainListState extends State<MainList> {
+  DatabaseMethods dbMethods = new DatabaseMethods();
   // A prototype deleteData which has redundant code
   void deleteData(int index) {
     if (index == widget.dataName.length) {
@@ -48,16 +52,23 @@ class _MainListState extends State<MainList> {
   }
 
   Widget _buildMockDataList(BuildContext context, int index) {
-    return Card(
-      child: MockData(                  // this will be replaced by data on a local database
-        sampleName: widget.dataName[index],
-        sampleValue: widget.dataValue[index],
-        sampleDescription: widget.dataDescription[index],
-        sampleCategory: widget.dataCategory[index],
-        sampleDelete: deleteData,
+    return Dismissible(
+      onDismissed: (DismissDirection d) {
+        if (d == DismissDirection.endToStart) dbMethods.deleteRow(widget.dataValue[index]);
+      },
+      key: Key(widget.dataName[index]),
+      child: Card(
+        child: MockData(
+          // this will be replaced by data on a local database
+          sampleName: widget.dataName[index],
+          sampleValue: widget.dataValue[index],
+          sampleDescription: widget.dataDescription[index],
+          sampleCategory: widget.dataCategory[index],
+          sampleDelete: deleteData,
+        ),
+        color: Colors.lightBlue,
+        margin: EdgeInsets.symmetric(horizontal: 10, vertical: 1),
       ),
-      color: Colors.lightBlue,
-      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 1),
     );
   }
 
@@ -65,7 +76,8 @@ class _MainListState extends State<MainList> {
   Widget build(BuildContext context) {
     return ListView.builder(
       itemBuilder: _buildMockDataList,
-      itemCount: widget.dataName.length,shrinkWrap: true,
+      itemCount: widget.dataName.length,
+      shrinkWrap: true,scrollDirection: Axis.horizontal,physics: const NeverScrollableScrollPhysics(),
     );
   }
 }

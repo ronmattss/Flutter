@@ -16,6 +16,11 @@ class Data {
     assignToList(dataValue, dataName, dataDescription, dataCategory);
   }
 
+  int getID(int i)
+  {int id;
+    return id;
+  }
+
   Future getSortedTasks(List<Map> map, String category) async {
      DatabaseMethods dbm = new DatabaseMethods();
     dataList = await dbm.addToFilteredList(category);
