@@ -1,8 +1,11 @@
 //Create Task screen
 // fields and shits
 // another route from main then
+import 'dart:core';
+
 import "package:flutter/material.dart";
 import 'package:myapp/helper_classes/crud.dart';
+import 'package:myapp/helper_classes/preference_helper.dart';
 
 //Instantiate Task class to access it's properties, it will be saved at the database after its implementation
 // save to database then load it in the MainList
@@ -14,6 +17,8 @@ class CreateTaskScreen extends StatefulWidget {
 }
 
 class _CreateTaskScreenState extends State<CreateTaskScreen> {
+ List<DropdownMenuItem<String>> listOfCategories;
+ String selectedCategery;
   String task;
   String description;
   String category = "Uncategorized";
@@ -21,7 +26,15 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
 
 
    //Database Entry Function
-
+List<DropdownMenuItem<String>> buildCategoryList(List categories)
+{
+  List<DropdownMenuItem<String>> items = List();
+  for(String string in categories)
+    {
+      items.add(DropdownMenuItem(value: string,child: Text(string),),);
+    }
+  return items;
+}
 
   void validateEntry() {
     if (task == null && description == null) {
@@ -49,7 +62,22 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
     );
   }
 
+  onChangeDropdownItem(String selectedCategory) {
+    setState(() {
+      category = selectedCategory;
+    });
+  }
+
+  @override
+  void initState(){
+  listOfCategories =buildCategoryList(PreferenceHelper.cat);
+  print(listOfCategories[0]);
+  category = listOfCategories[0].value;
+  }
+
   Widget _buildBody() {
+    print("some categories: ${PreferenceHelper.cat}");
+
     return Container(margin: EdgeInsets.all(10.0),
       child: Column(
         children: <Widget>[
@@ -75,20 +103,10 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
               });
             },
           ),
-          DropdownButton<String>(
-            onChanged: (String newValue) {
-              setState(() {
-                category = newValue;
-              });
-            },
+          DropdownButton(
+            onChanged: onChangeDropdownItem,
             value: category,
-            items: <String>["Uncategorized","Important", "Casual Task"]
-                .map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
+            items: listOfCategories,
           ),
           FlatButton(
               child: Text("Save"),

@@ -6,15 +6,28 @@ import '../helper_classes/data.dart';
 import '../main_screen/card_list.dart';
 import 'package:myapp/helper_classes/data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../helper_classes/preference_helper.dart';
 
 // Data will be changed to a database entry
 // A profile for the user, shows tasks number
 // Change Model class
 // CARD VIEW FOR EACH CATEGORY
 // TODO: Preference Screen for options like name, categories, colors,
+// TODO: Revamp create_screen
+// TODO: Category background list or picture?
+// TODO: Card Ontap goto list of tasks
+// TODO: Add Options screen
+// TODO: Populate create_screen with new options
 void main() {
+  // why is there a list in the main function?
+  // this will check if preferences are working or not
+  PreferenceHelper.testPrint();
 
   runApp(MainScreen());
+}
+
+void increment(int a) {
+  a++;
 }
 
 class MainScreen extends StatefulWidget {
@@ -34,15 +47,14 @@ class _MainScreenState extends State<MainScreen>
     // print(data.dataList);
   }
 
-  void testPref() async
-  {
+  void testPref() async {
     List<String> test = new List<String>();
     final pref = await SharedPreferences.getInstance();
-    int counter = (pref.getInt('counter')?? 0) + 1;
-    await pref.setStringList("Category",test);
+    int counter = (pref.getInt('counter') ?? 0) + 1;
+    await pref.setStringList("Category", test);
     print("pressed $counter times.");
-    print(pref.getStringList("Category")?? "No Value");
-    await pref.setInt('counter',counter);
+    print(pref.getStringList("Category") ?? "No Value");
+    await pref.setInt('counter', counter);
   }
 
   void gotoCreateTaskPage() {
@@ -52,15 +64,6 @@ class _MainScreenState extends State<MainScreen>
             builder: (BuildContext context) => CreateTaskScreen()));
   }
 
-  /*          Container(
-            margin: EdgeInsets.all(5),
-            height: 100,
-            width: 100,
-            decoration: new BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.amberAccent,
-            ),
-          )*/
 
   Widget _buildProfile(BuildContext context) {
     //left side pic right side some task summaries
@@ -70,7 +73,7 @@ class _MainScreenState extends State<MainScreen>
       children: <Widget>[
         Row(),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 32.0),
+          padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 64.0),
           child: Container(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -115,7 +118,24 @@ class _MainScreenState extends State<MainScreen>
     ));
   }
 
-//Spacer(),Container(height: 100,margin: EdgeInsets.all(10),child: Column(mainAxisAlignment: MainAxisAlignment.start,children: <Widget>[Text("Number of Completed Tasks: 10\nNumber of Active Tasks: 5",)])
+  Widget _buildCardFuture(BuildContext context) {
+    return FutureBuilder(
+      initialData: PreferenceHelper,
+      future: PreferenceHelper.setCategory(),
+      builder: (context, snapshot) {
+        List<String> categories = PreferenceHelper.cat;
+        if (categories == null) {
+          List<String> temp = List<String>();
+          for (int i = 0; i < 20; i++) temp.add("Fetching Data");
+          return CardList(temp);
+        } else {
+          print("Success Category loaded; ${PreferenceHelper.cat}");
+          return CardList(PreferenceHelper.cat);
+        }
+      },
+    );
+  }
+  // might change this
   Widget _buildFuture(BuildContext context) {
     Data data = new Data();
     return FutureBuilder(
@@ -135,41 +155,10 @@ class _MainScreenState extends State<MainScreen>
         });
   }
 
-  Widget containerWithText(BuildContext context, String text) {
-    return Center(
-      child: Card(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            const ListTile(
-              leading: Icon(Icons.album),
-              title: Text('The Enchanted Nightingale'),
-              subtitle: Text('Music by Julie Gable. Lyrics by Sidney Stein.'),
-            ),
-            ButtonTheme.bar(
-              // make buttons use the appropriate styles for cards
-              child: ButtonBar(
-                children: <Widget>[
-                  FlatButton(
-                    child: const Text('BUY TICKETS'),
-                    onPressed: () {/* ... */},
-                  ),
-                  FlatButton(
-                    child: const Text('LISTEN'),
-                    onPressed: () {/* ... */},
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
   Widget _mainBodyBuild(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+/*      appBar: AppBar(
         title: new Text(
           "TODO",
           style: TextStyle(fontSize: 16.0),
@@ -179,22 +168,22 @@ class _MainScreenState extends State<MainScreen>
         actions: <Widget>[
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
-            child: FlatButton(child: Text("hit me"),onPressed:testPref,),
+            child: FlatButton(
+              child: Text("hit me"),
+              onPressed: testPref,
+            ),
           ),
         ],
         elevation: 0.0,
-      ),
+      ),*/
       drawer: Drawer(),
       body: Column(
         children: <Widget>[
           _buildProfile(context),
-          SizedBox(
-              height: 335,
-              child:  CardList()),
+          SizedBox(height: 335, child: _buildCardFuture(context)),
         ],
       ),
       backgroundColor: Colors.cyan,
-
       floatingActionButton: FloatingActionButton(
         onPressed: () => ({
           Navigator.of(context)
