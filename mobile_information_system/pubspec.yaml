@@ -1,5 +1,5 @@
-name: myapp
-description: A new Flutter test app
+name: mobile_information_system
+description: A new Flutter application.
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -14,7 +14,7 @@ description: A new Flutter test app
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.2.0 <3.0.0"
+  sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -23,11 +23,6 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
-  english_words: ^3.1.0
-  sqflite: ^1.1.0
-  path_provider: ^1.1.0
-  shared_preferences: ^0.5.3
-  palette_generator: ^0.2.0
 
 dev_dependencies:
   flutter_test:
@@ -35,12 +30,10 @@ dev_dependencies:
 
 
 # For information on the generic Dart part of this file, see the
-# following page: https://www.dartlang.org/tools/pub/pubspec
+# following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter.
 flutter:
-  assets:
-   - assets/
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

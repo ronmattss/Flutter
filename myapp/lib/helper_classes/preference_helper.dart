@@ -1,5 +1,7 @@
-import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:ui';
 
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/material.dart';
 class PreferenceHelper {
   static List<String> cat;
 
@@ -89,6 +91,8 @@ class PreferenceHelper {
       print(cat);
     }
     print(cat.length);
+
+
   }
 
  static void testPrint()
