@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.os.Debug;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.shadedgames.student_info_system.helper_classes.DatabaseHelper;
 import com.shadedgames.student_info_system.helper_classes.Grades;
 import com.shadedgames.student_info_system.helper_classes.Profile;
@@ -39,12 +40,11 @@ public class MainActivity extends FlutterActivity {
 
 
 
-/*
+
+
         db.addStudent(new Profile("2018-0000-MN-0","qwerty","BSCS","Rivera",19));
-        db.addStudent(new Profile("2018-0001-MN-0","QWERTY","BSCS","Matthew",20));
-        db.addGrade(new Grades("2018-0000-MN-0",1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f));
-        db.addGrade(new Grades("2018-0001-MN-0",1.50f,1.0f,1.0f,1.50f,1.25f,1.0f,1.75f,1.0f,1.25f));
-*/
+        db.addGrade(new Grades("2018-0000-MN-0",1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0));
+
 
 
         // When uninstalling pls change this two sample data
@@ -60,14 +60,14 @@ public class MainActivity extends FlutterActivity {
                     @Override
                     public void onMethodCall(MethodCall call, Result result) {
                         if (call.method.equals("getSample")) {
-                            Profile student = new Profile(-1, "NULL", "NULL","NULL","NULL",-1);
+                            Profile student = new Profile(-1, "NULL", "NULL", "NULL", "NULL", -1);
                             String getArg = call.argument("user");
                             String getPass = call.argument("pass");
 
                             try {
                                 student = db.getStudent(getArg);
                                 if (student == null) {
-                                    student =  new Profile(-1, "NULL", "NULL","NULL","NULL",-1);
+                                    student = new Profile(-1, "NULL", "NULL", "NULL", "NULL", -1);
                                     System.out.println("Error user not found");
                                 } else {
 
@@ -81,10 +81,39 @@ public class MainActivity extends FlutterActivity {
                             System.out.println("user and pass:" + getArg + " " + getPass);
 
                             result.success(student.testGson());
-                        } else {
+                        } else if (call.method.equals("getGrades")) {
+                            // return string of grades class
+                            Grades grades = new Grades();
+                            String getStudentId = call.argument("id");
+                            try {
+                                grades = db.getGrades(getStudentId);
+                                if (grades == null) {
+                                    grades = new Grades(-1, "NULL", -1, -1, -1, -1, -1, -1, -1, -1, -1);
+                                } else {
+                                    System.out.println("Found Grades! " + grades.getStdId());
+                                }
+                            } catch (NullPointerException e) {
+                                e.printStackTrace();
+                            }
+                            result.success(grades.testGson());
+                        }
+                        else if(call.method.equals("insertProfile"))
+                        { //  convert JSON String to Object
+                            Gson json = new Gson();
+                            String jsonString = call.argument("profile");
+                            String jsonString2 = call.argument("grades");
+                            Grades g = json.fromJson(jsonString2,Grades.class);
+                            Profile p = json.fromJson(jsonString,Profile.class);
+                            db.addStudent(new Profile(p.getStudentId(),p.getPassword(),p.getCourse(),p.getName(),p.getAge()));
+                            db.addGrade(new Grades(g.getStdId(),g.getFirstSub(),g.getSecondSub(),g.getThirdSub(),g.getFourthSub(),g.getFifthSub(),g.getSixthSub(),g.getSeventhSub(),g.getEightSub(),g.getNinthSub()));
+                            result.success(p.getName() + " and grades of " +g.getStdId()+" Added to database!");
+                            //  db.addStudent();
+                        }
+                        else {
                             result.notImplemented();
                         }
                     }
+
                 }
         );
     }

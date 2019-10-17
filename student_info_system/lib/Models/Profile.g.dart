@@ -11,8 +11,8 @@ Profile _$ProfileFromJson(Map<String, dynamic> json) {
       json['id'] as int,
       json['studentId'] as String,
       json['password'] as String,
-      json['course'] as String,
       json['name'] as String,
+      json['course'] as String,
       json['age'] as int);
 }
 

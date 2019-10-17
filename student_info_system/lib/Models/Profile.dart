@@ -7,7 +7,7 @@ part 'Profile.g.dart';
 class Profile {
   @JsonKey(name: 'id')
   int id;
-  @JsonKey(name: 'sutdentId')
+  @JsonKey(name: 'studentId')
   String studentId;
   @JsonKey(name: 'password')
   String password;
@@ -29,7 +29,7 @@ class Profile {
     this.id = id;
   }*/
 
-  Profile(this.id,this.studentId,this.password,this.name,this.course,this.age);
+  Profile([this.id,this.studentId,this.password,this.name,this.course,this.age]);
   factory Profile.fromJson(Map<String, dynamic> json) =>
       _$ProfileFromJson(json);            // a factory method to deserialize a JSON string to a Dart Object
 
@@ -70,4 +70,8 @@ class Profile {
   void setName(String name) {
     this.name = name;
   }
+  
+  
+  //second year first sem
+
 }

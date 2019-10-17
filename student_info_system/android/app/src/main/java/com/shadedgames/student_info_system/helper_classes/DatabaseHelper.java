@@ -127,7 +127,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         val.put(KEY_FOURTHSUB, grades.getFourthSub());
         val.put(KEY_FIFTHSUB, grades.getFifthSub());
         val.put(KEY_SIXTHSUB, grades.getSixthSub());
-        val.put(KEY_SEVENTHSUB, grades.getSeventSub());
+        val.put(KEY_SEVENTHSUB, grades.getSeventhSub());
         val.put(KEY_EIGHTHSUB, grades.getEightSub());
         val.put(KEY_NINETHSUB, grades.getNinthSub());
 
@@ -183,13 +183,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.query(TABLE_GRADES, new String[]{KEY_IDGRADES, KEY_STUDENTID, KEY_FIRSTSUB, KEY_SECONDSUB, KEY_THIRDSUB, KEY_FOURTHSUB, KEY_FIFTHSUB, KEY_SIXTHSUB, KEY_SEVENTHSUB, KEY_EIGHTHSUB, KEY_NINETHSUB}, KEY_IDGRADES + "=?", new String[]{String.valueOf(id)}, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
-        Grades grades = new Grades(cursor.getInt(0), cursor.getString(1), cursor.getFloat(2), cursor.getFloat(3), cursor.getFloat(4), cursor.getFloat(5), cursor.getFloat(6), cursor.getFloat(7), cursor.getFloat(8), cursor.getFloat(9), cursor.getFloat(10));
+        Grades grades = new Grades(cursor.getInt(0), cursor.getString(1), cursor.getDouble(2), cursor.getDouble(3), cursor.getDouble(4), cursor.getDouble(5), cursor.getDouble(6), cursor.getDouble(7), cursor.getDouble(8), cursor.getDouble(9), cursor.getDouble(10));
+
+        return grades;
+    }
+
+    public Grades getGrades(String id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(TABLE_GRADES, new String[]{KEY_IDGRADES, KEY_STUDENTID, KEY_FIRSTSUB, KEY_SECONDSUB, KEY_THIRDSUB, KEY_FOURTHSUB, KEY_FIFTHSUB, KEY_SIXTHSUB, KEY_SEVENTHSUB, KEY_EIGHTHSUB, KEY_NINETHSUB}, KEY_STUDENTID + "=?", new String[]{String.valueOf(id)}, null, null, null, null);
+        if (cursor != null)
+            cursor.moveToFirst();
+        Grades grades = new Grades(cursor.getInt(0), cursor.getString(1), cursor.getDouble(2), cursor.getDouble(3), cursor.getDouble(4), cursor.getDouble(5), cursor.getDouble(6), cursor.getDouble(7), cursor.getDouble(8), cursor.getDouble(9), cursor.getDouble(10));
 
         return grades;
     }
 
     public List<Profile> getAllProfiles() {
         List<Profile> profiles = new ArrayList<Profile>();
+
         // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_PROFILE;
 
@@ -239,7 +251,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_FOURTHSUB, grades.getFourthSub());
         values.put(KEY_FIFTHSUB, grades.getFifthSub());
         values.put(KEY_SIXTHSUB, grades.getSixthSub());
-        values.put(KEY_SEVENTHSUB, grades.getSeventSub());
+        values.put(KEY_SEVENTHSUB, grades.getSeventhSub());
         values.put(KEY_EIGHTHSUB, grades.getEightSub());
         values.put(KEY_NINETHSUB, grades.getNinthSub());
 

@@ -3,8 +3,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:student_info_system/Models/Grades.dart';
 import 'package:student_info_system/Models/Profile.dart';
+import 'package:student_info_system/pages/adminpage/admin.dart';
 import 'package:student_info_system/pages/mainpage/mainpage.dart';
+import 'package:student_info_system/pages/loginpage/login.dart';
 
 void main() {
   Map<int, Color> colorMap = {
@@ -18,16 +21,14 @@ void main() {
     700: Color.fromRGBO(128, 0, 0, .8),
     800: Color.fromRGBO(128, 0, 0, .9),
     900: Color.fromRGBO(128, 0, 0, 1),
-
   };
   MaterialColor custom = MaterialColor(0xFF800000, colorMap);
   runApp(MaterialApp(
-
     title: 'Mobile SIS',
     theme: ThemeData(
       primarySwatch: custom,
     ),
-    home: login(),
+    home: Login(),
   ));
 }
 
@@ -46,15 +47,15 @@ void main() {
   }
 }*/
 
-class login extends StatefulWidget {
+class Login extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _login();
+    return _Login();
   }
 }
 
-class _login extends State<login> {
+class _Login extends State<Login> {
   static const platform = const MethodChannel('samples.flutter.dev/battery');
   String _emailValue;
   String _passwordValue;
@@ -62,7 +63,7 @@ class _login extends State<login> {
   DecorationImage _buildBackgroundImage() {
     return DecorationImage(
         colorFilter:
-        ColorFilter.mode(Colors.black.withOpacity(0.5), BlendMode.dstATop),
+            ColorFilter.mode(Colors.black.withOpacity(0.5), BlendMode.dstATop),
         image: AssetImage("assets/puplogo.jpg"));
   }
 
@@ -102,6 +103,11 @@ class _login extends State<login> {
     print(_emailValue);
     print(_passwordValue);
     Profile student;
+    Grades grades;
+    if (_emailValue == "adminpls" && _passwordValue == "AdminPls") {
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (BuildContext context) => AdminPage()));
+    }
     try {
       final String result = await platform.invokeMethod(
           'getSample', <String, String>{
@@ -115,14 +121,19 @@ class _login extends State<login> {
           Fluttertoast.showToast(
               msg: "Incorrect Username or password!",
               backgroundColor: Color.fromRGBO(128, 255, 0, 1));
-        }
+        } else {
+          final String resultGrades = await platform
+              .invokeMethod("getGrades", <String, String>{'id': _emailValue});
+          Map gradesMap = jsonDecode(resultGrades);
+          grades = Grades.fromJson(gradesMap);
 
-        else {
           Fluttertoast.showToast(msg: "syncing.....");
+          print(student.studentId);
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (BuildContext context) => MainPage(student)));
+                  builder: (BuildContext context) =>
+                      MainPage(student, grades)));
         }
       } on NullThrownError catch (e) {}
     } on PlatformException catch (e) {
@@ -140,15 +151,12 @@ class _login extends State<login> {
 
   @override
   Widget build(BuildContext context) {
-    final double deviceWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
+    final double deviceWidth = MediaQuery.of(context).size.width;
     final double targetWidth = deviceWidth > 550.0 ? 500.0 : deviceWidth * 0.95;
-    return Scaffold(
+    return Scaffold(resizeToAvoidBottomPadding: true,
       appBar: AppBar(
         backgroundColor: Color.fromRGBO(128, 0, 0, 100),
-        title: Text('Polytechnic University of the Philippines'),
+        title: Text('Mobile System'),
       ),
       body: Container(
         decoration: BoxDecoration(

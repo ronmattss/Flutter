@@ -9,22 +9,22 @@ public class Grades {
 
     private int id;
     private String stdId;
-    private  float firstSub;
-    private  float secondSub;
-    private float thirdSub;
-    private float fourthSub;
-    private float fifthSub;
-    private float sixthSub;
-    private float seventhSub;
-    private float eightSub;
-    private float ninthSub;
+    private  double firstSub;
+    private  double secondSub;
+    private double thirdSub;
+    private double fourthSub;
+    private double fifthSub;
+    private double sixthSub;
+    private double seventhSub;
+    private double eightSub;
+    private double ninthSub;
 
     public Grades()
     {
 
     }
-
-    public Grades(int id, String stdId,float firstSub,float secondSub, float thirdSub, float fourthSub, float fifthSub, float sixthSub, float seventhSub, float eightSub, float ninthSub)
+    // constructor from a Database INPUT
+    public Grades(int id, String stdId,double firstSub,double secondSub, double thirdSub, double fourthSub, double fifthSub, double sixthSub, double seventhSub, double eightSub, double ninthSub)
     {
         setId(id);
         setStdId(stdId);
@@ -38,7 +38,8 @@ public class Grades {
         setEightSub(eightSub);
         setNinthSub(ninthSub);
     }
-    public Grades(String stdId,float firstSub,float secondSub, float thirdSub, float fourthSub, float fifthSub, float sixthSub, float seventhSub, float eightSub, float ninthSub)
+    // constructor from a JSON STRING INPUT
+    public Grades(String stdId,double firstSub,double secondSub, double thirdSub, double fourthSub, double fifthSub, double sixthSub, double seventhSub, double eightSub, double ninthSub)
     {
         setStdId(stdId);
         setFirstSub(firstSub);
@@ -52,39 +53,39 @@ public class Grades {
         setNinthSub(ninthSub);
     }
 
-    public float getEightSub() {
+    public double getEightSub() {
         return eightSub;
     }
 
-    public float getFifthSub() {
+    public double getFifthSub() {
         return fifthSub;
     }
 
-    public float getFirstSub() {
+    public double getFirstSub() {
         return firstSub;
     }
 
-    public float getFourthSub() {
+    public double getFourthSub() {
         return fourthSub;
     }
 
-    public float getNinthSub() {
+    public double getNinthSub() {
         return ninthSub;
     }
 
-    public float getSecondSub() {
+    public double getSecondSub() {
         return secondSub;
     }
 
-    public float getSeventSub() {
+    public double getSeventhSub() {
         return seventhSub;
     }
 
-    public float getSixthSub() {
+    public double getSixthSub() {
         return sixthSub;
     }
 
-    public float getThirdSub() {
+    public double getThirdSub() {
         return thirdSub;
     }
 
@@ -96,19 +97,19 @@ public class Grades {
         return stdId;
     }
 
-    public void setEightSub(float eightSub) {
+    public void setEightSub(double eightSub) {
         this.eightSub = eightSub;
     }
 
-    public void setFifthSub(float fifthSub) {
+    public void setFifthSub(double fifthSub) {
         this.fifthSub = fifthSub;
     }
 
-    public void setFirstSub(float firstSub) {
+    public void setFirstSub(double firstSub) {
         this.firstSub = firstSub;
     }
 
-    public void setFourthSub(float fourthSub) {
+    public void setFourthSub(double fourthSub) {
         this.fourthSub = fourthSub;
     }
 
@@ -116,19 +117,19 @@ public class Grades {
         this.id = id;
     }
 
-    public void setNinthSub(float ninthSub) {
+    public void setNinthSub(double ninthSub) {
         this.ninthSub = ninthSub;
     }
 
-    public void setSecondSub(float secondSub) {
+    public void setSecondSub(double secondSub) {
         this.secondSub = secondSub;
     }
 
-    public void setSeventhSub(float seventhSub) {
+    public void setSeventhSub(double seventhSub) {
         this.seventhSub = seventhSub;
     }
 
-    public void setSixthSub(float sixthSub) {
+    public void setSixthSub(double sixthSub) {
         this.sixthSub = sixthSub;
     }
 
@@ -136,7 +137,7 @@ public class Grades {
         this.stdId = stdId;
     }
 
-    public void setThirdSub(float thirdSub) {
+    public void setThirdSub(double thirdSub) {
         this.thirdSub = thirdSub;
     }
 
@@ -152,7 +153,7 @@ public class Grades {
         profileMap.put("fourthSub",getFourthSub());
         profileMap.put("fifthSub",getFifthSub());
         profileMap.put("sixthSub",getSixthSub());
-        profileMap.put("seventhSub",getSeventSub());
+        profileMap.put("seventhSub",getSeventhSub());
         profileMap.put("eightSub",getEightSub());
         profileMap.put("ninthSub",getNinthSub());
         String output = gson.toJson(profileMap);
