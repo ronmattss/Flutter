@@ -9,14 +9,7 @@ class GradeCard extends StatelessWidget {
 
   GradeCard(this.grades);
 
-  Widget _buildListTile(BuildContext context, int index) {
-    List<String> s = grades.subjects();
-    List<String> ss = grades.subjectCodes();
-    return ListTile(
-      contentPadding: EdgeInsets.all(5),
-      title: Text(s[index]),
-    );
-  }
+
 
   Widget _buildExpansionTile(BuildContext context) {
     return cus.ExpansionSubTitledTile(

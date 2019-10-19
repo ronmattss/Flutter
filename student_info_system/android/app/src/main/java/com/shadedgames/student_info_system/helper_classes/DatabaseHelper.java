@@ -17,7 +17,7 @@ import java.util.List;
 public class DatabaseHelper extends SQLiteOpenHelper {
     Context myContext;
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "profile";
 
     //table names
@@ -142,7 +142,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_PROFILE, new String[]{KEY_ID,
-                        KEY_STUDENT_ID, KEY_PASS, KEY_NAME, KEY_COURSE, KEY_AGE}, KEY_ID + "=?",
+                        KEY_STUDENT_ID, KEY_PASS, KEY_COURSE, KEY_NAME, KEY_AGE}, KEY_ID + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
@@ -157,16 +157,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_PROFILE, new String[]{KEY_ID,
-                        KEY_STUDENT_ID, KEY_PASS, KEY_NAME, KEY_COURSE, KEY_AGE}, KEY_STUDENT_ID + "=?",
+                        KEY_STUDENT_ID, KEY_PASS, KEY_COURSE, KEY_NAME, KEY_AGE}, KEY_STUDENT_ID + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
         if (cursor != null && cursor.moveToFirst()) {
             try {
                 cursor.moveToFirst();
             } catch (Exception e) {
-               e.printStackTrace();
+                e.printStackTrace();
             }
         } else {
-          //  Profile profile = new Profile(-1, "NULL", "NULL");
+            //  Profile profile = new Profile(-1, "NULL", "NULL");
             return null;
         }
 
@@ -191,7 +191,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Grades getGrades(String id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(TABLE_GRADES, new String[]{KEY_IDGRADES, KEY_STUDENTID, KEY_FIRSTSUB, KEY_SECONDSUB, KEY_THIRDSUB, KEY_FOURTHSUB, KEY_FIFTHSUB, KEY_SIXTHSUB, KEY_SEVENTHSUB, KEY_EIGHTHSUB, KEY_NINETHSUB}, KEY_STUDENTID + "=?", new String[]{String.valueOf(id)}, null, null, null, null);
+        Cursor cursor = db.query(TABLE_GRADES, new String[]{KEY_IDGRADES, KEY_STUDENTID, KEY_FIRSTSUB, KEY_SECONDSUB, KEY_THIRDSUB, KEY_FOURTHSUB, KEY_FIFTHSUB, KEY_SIXTHSUB, KEY_SEVENTHSUB, KEY_EIGHTHSUB, KEY_NINETHSUB}, KEY_STUDENTID + "=?", new String[]{id}, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
         Grades grades = new Grades(cursor.getInt(0), cursor.getString(1), cursor.getDouble(2), cursor.getDouble(3), cursor.getDouble(4), cursor.getDouble(5), cursor.getDouble(6), cursor.getDouble(7), cursor.getDouble(8), cursor.getDouble(9), cursor.getDouble(10));
@@ -225,19 +225,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // code to update the single Profile
-    public int updateProfile(Profile contact) {
+    public int updateProfile(Profile student) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_STUDENT_ID, contact.getStudentId());
-        values.put(KEY_PASS, contact.getPassword());
-        values.put(KEY_COURSE, contact.getCourse());
-        values.put(KEY_NAME, contact.getName());
-        values.put(KEY_AGE, contact.getAge());
+        values.put(KEY_STUDENT_ID, student.getStudentId());
+        values.put(KEY_PASS, student.getPassword());
+        values.put(KEY_COURSE, student.getCourse());
+        values.put(KEY_NAME, student.getName());
+        values.put(KEY_AGE, student.getAge());
 
         // updating row
-        return db.update(TABLE_PROFILE, values, KEY_ID + " = ?",
-                new String[]{String.valueOf(contact.getId())});
+        return db.update(TABLE_PROFILE, values, KEY_STUDENT_ID + " = ?",
+                new String[]{String.valueOf(student.getStudentId())});
     }
 
     public int updateGrades(Grades grades) {
@@ -254,10 +254,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_SEVENTHSUB, grades.getSeventhSub());
         values.put(KEY_EIGHTHSUB, grades.getEightSub());
         values.put(KEY_NINETHSUB, grades.getNinthSub());
-
         // updating row
-        return db.update(TABLE_PROFILE, values, KEY_ID + " = ?",
-                new String[]{String.valueOf(grades.getId())});
+        return db.update(TABLE_GRADES, values, KEY_STUDENTID + " = ?",
+                new String[]{String.valueOf(grades.getStdId())});
     }
 
     public void deleteProfile(Profile contact) {
@@ -266,16 +265,48 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 new String[]{String.valueOf(contact.getId())});
         db.close();
     }
+    public void deleteProfile(String student) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_PROFILE, KEY_STUDENT_ID + " = ?",
+                new String[]{String.valueOf(student)});
+        deleteGrades(student);
+        db.close();
+    }
+    public void deleteGrades(String stdId)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_GRADES, KEY_STUDENTID +" = ?", new String[]{stdId});
+        db.close();
+    }
+    public void deleteAll()
+    {
+        // Straight forward Deletion of all contents
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_PROFILE,null,null);
+        db.delete(TABLE_GRADES,null,null);
+    }
 
-    // Getting contacts Count
+
+    // Getting Prfile Count
     public int getProfileCount() {
         String countQuery = "SELECT  * FROM " + TABLE_PROFILE;
+        int count = 0;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
+        count = cursor.getCount();
         cursor.close();
 
         // return count
-        return cursor.getCount();
+        return count;
+    }
+
+    public int getGradesCount() {
+        String countQuery = "SELECT  * FROM " + TABLE_GRADES;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery, null);
+        int count = cursor.getCount();
+        cursor.close();
+        return count;
     }
 
 }

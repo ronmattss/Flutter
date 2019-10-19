@@ -9,8 +9,8 @@ public class Grades {
 
     private int id;
     private String stdId;
-    private  double firstSub;
-    private  double secondSub;
+    private double firstSub;
+    private double secondSub;
     private double thirdSub;
     private double fourthSub;
     private double fifthSub;
@@ -19,13 +19,12 @@ public class Grades {
     private double eightSub;
     private double ninthSub;
 
-    public Grades()
-    {
+    public Grades() {
 
     }
+
     // constructor from a Database INPUT
-    public Grades(int id, String stdId,double firstSub,double secondSub, double thirdSub, double fourthSub, double fifthSub, double sixthSub, double seventhSub, double eightSub, double ninthSub)
-    {
+    public Grades(int id, String stdId, double firstSub, double secondSub, double thirdSub, double fourthSub, double fifthSub, double sixthSub, double seventhSub, double eightSub, double ninthSub) {
         setId(id);
         setStdId(stdId);
         setFirstSub(firstSub);
@@ -38,9 +37,9 @@ public class Grades {
         setEightSub(eightSub);
         setNinthSub(ninthSub);
     }
+
     // constructor from a JSON STRING INPUT
-    public Grades(String stdId,double firstSub,double secondSub, double thirdSub, double fourthSub, double fifthSub, double sixthSub, double seventhSub, double eightSub, double ninthSub)
-    {
+    public Grades(String stdId, double firstSub, double secondSub, double thirdSub, double fourthSub, double fifthSub, double sixthSub, double seventhSub, double eightSub, double ninthSub) {
         setStdId(stdId);
         setFirstSub(firstSub);
         setSecondSub(secondSub);
@@ -141,21 +140,20 @@ public class Grades {
         this.thirdSub = thirdSub;
     }
 
-    public String testGson()
-    {
+    public String testGson() {
         Gson gson = new Gson();
-        Map<String,Object> profileMap = new HashMap<>();
-        profileMap.put("id",getId());
-        profileMap.put("stdId",getStdId());
-        profileMap.put("firstSub",getFirstSub());
-        profileMap.put("secondSub",getSecondSub());
-        profileMap.put("thirdSub",getThirdSub());
-        profileMap.put("fourthSub",getFourthSub());
-        profileMap.put("fifthSub",getFifthSub());
-        profileMap.put("sixthSub",getSixthSub());
-        profileMap.put("seventhSub",getSeventhSub());
-        profileMap.put("eightSub",getEightSub());
-        profileMap.put("ninthSub",getNinthSub());
+        Map<String, Object> profileMap = new HashMap<>();
+        profileMap.put("id", getId());
+        profileMap.put("stdId", getStdId());
+        profileMap.put("firstSub", getFirstSub());
+        profileMap.put("secondSub", getSecondSub());
+        profileMap.put("thirdSub", getThirdSub());
+        profileMap.put("fourthSub", getFourthSub());
+        profileMap.put("fifthSub", getFifthSub());
+        profileMap.put("sixthSub", getSixthSub());
+        profileMap.put("seventhSub", getSeventhSub());
+        profileMap.put("eightSub", getEightSub());
+        profileMap.put("ninthSub", getNinthSub());
         String output = gson.toJson(profileMap);
 
         return output;

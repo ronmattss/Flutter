@@ -5,16 +5,22 @@ part 'Profile.g.dart';
 
 @JsonSerializable()
 class Profile {
+
   @JsonKey(name: 'id')
   int id;
+
   @JsonKey(name: 'studentId')
   String studentId;
+
   @JsonKey(name: 'password')
   String password;
+
   @JsonKey(name: 'name')
   String name;
+
   @JsonKey(name: 'course')
   String course;
+
   @JsonKey(name: 'age')
   int age;
 
