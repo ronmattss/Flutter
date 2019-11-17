@@ -4,6 +4,7 @@ import 'package:student_info_system/Models/Grades.dart';
 import 'package:student_info_system/Models/Profile.dart';
 import 'package:student_info_system/pages/loginpage/login.dart';
 import 'package:student_info_system/pages/mainpage/gradecard.dart';
+import 'package:student_info_system/pages/mainpage/schedulecard.dart';
 
 class MainPage extends StatefulWidget {
   final Profile profile;
@@ -89,7 +90,7 @@ class _MainPageState extends State<MainPage> {
 
     return MaterialApp(
       home: DefaultTabController(
-        length: 2,
+        length: 3,
         child: Scaffold(
           appBar: AppBar(
             actions: <Widget>[
@@ -107,6 +108,7 @@ class _MainPageState extends State<MainPage> {
               tabs: <Widget>[
                 Tab(text: "Profile"),
                 Tab(text: "Grades"),
+                Tab(text: "Schedule"),
               ],
             ),
             title: Text("Student Information"),
@@ -116,6 +118,7 @@ class _MainPageState extends State<MainPage> {
                 children: <Widget>[
                   _profile(context),
                   GradeCard(widget.grades),
+                  ScheduleCard()
                 ],
               )),
         ),

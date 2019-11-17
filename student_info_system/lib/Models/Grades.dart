@@ -71,7 +71,7 @@ class Grades {
   {
     List<String> subs = new List<String>();
     subs.add("Data Structures and Algorithms");
-    subs.add("Discrete Structures");
+    subs.add("Discrete Structures 2");
     subs.add("Object Oriented Programming");
     subs.add("Modelling and Simulation");
     subs.add("Logic Design");
