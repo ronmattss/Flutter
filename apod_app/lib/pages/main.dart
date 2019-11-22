@@ -1,6 +1,7 @@
 import 'package:apod_app/helper/APOD.dart';
 import 'package:apod_app/helper/rest_request.dart';
 import 'package:apod_app/widgets/apod_list.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -34,7 +35,7 @@ class _MainScreenState extends State<MainScreen>
     super.initState();
     RestRequest.testDates();
     apod = rr.requestAPOD();
-    apodList = rr.requestTenAPOD();
+ //   apodList = rr.requestTenAPOD();
   }
 
   // Future builder that will request data from APOD
@@ -48,8 +49,10 @@ class _MainScreenState extends State<MainScreen>
               child: Text("There is no APOD today"),
             );
           } else
-            return _buildCard(context, snapshot.data);
+            return Container(
+                height: 200, child: _buildCard(context, snapshot.data));
         } else if (snapshot.hasError) {
+          
           return (Center(child: Text("APOD not available, Check later")));
         }
         return Center(child: CircularProgressIndicator());
@@ -60,14 +63,15 @@ class _MainScreenState extends State<MainScreen>
   Widget _buildAPODList(BuildContext context) {
     return FutureBuilder<List<APOD>>(
       future: apodList,
-      builder: (context, snapshot) 
-      { if(snapshot.hasData == true)
-      {
-        return Expanded(child:ApodList(apods: snapshot.data));
-      }
-      else{
-        return Text("No apods");
-      }
+      builder: (context, snapshot) {
+        if (snapshot.hasData == true) {
+          Size size = MediaQuery.of(context).size;
+          return SizedBox(
+              height: ((size.height / 2) - 100),
+              child: ApodList(apods: snapshot.data));
+        } else {
+          return Text("No apods");
+        }
       },
     );
   }
@@ -82,15 +86,16 @@ class _MainScreenState extends State<MainScreen>
           children: <Widget>[
             ClipRRect(
                 borderRadius: BorderRadius.circular(5.0),
-                child: Image.network(
-                  pod.hdurl,
-                  width: size.width ,
+                child: CachedNetworkImage(
+                  imageUrl: pod.hdurl,
+                  placeholder: (context, url) => CircularProgressIndicator(),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
+                  width: size.width,
                   height: size.height / 2,
                   fit: BoxFit.cover,
                   color: Color.fromRGBO(0, 0, 0, .35),
                   colorBlendMode: BlendMode.darken,
                 )),
-
           ],
         ),
       ),
@@ -98,7 +103,6 @@ class _MainScreenState extends State<MainScreen>
   }
 
   Widget _mainBodyBuild(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Scaffold(
         appBar: AppBar(
           title: new Text(
@@ -132,7 +136,7 @@ class _MainScreenState extends State<MainScreen>
           Column(
             children: <Widget>[
               _buildApod(context),
-              _buildAPODList(context)
+           //   _buildAPODList(context)
               // SizedBox(height: 300, child: _buildCardFuture(context)),
             ],
           ),
