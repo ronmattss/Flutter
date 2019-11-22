@@ -18,7 +18,7 @@ class RestRequest {
     try {
       return await http.get(url);
     } catch (e) {
-      print("no internet I think");
+      print("Internet not Available");
       return null;
     }
   }
@@ -34,17 +34,8 @@ class RestRequest {
     if (response != null) {
       String responseBody = response.body;
       if (response.statusCode == 200) {
-        List<int> stringLength = utf8.encode(responseBody);
-        Uint8List byteSize = stringLength;
-        var cachedJSON = await DefaultCacheManager().putFile(
-            responseBody, byteSize,
-            fileExtension: ".json", eTag: cacheURI);
-        var x = await cachedJSON.readAsString();
-        print('Caching: $x');
-        var y = DefaultCacheManager().getFileFromCache(cacheURI);
-        
-        print("Experimenting: ${y.asStream().last}");
-        
+        var y = await DefaultCacheManager().getSingleFile(url);        
+        print(y.readAsString());
         print("Trying to read from cache$z");
         Map apodMap = jsonDecode(responseBody);
         APOD apod = new APOD.fromJson(apodMap);
@@ -53,7 +44,7 @@ class RestRequest {
         return apod;
       } else {
         var cachedLatestAPOD =
-            await DefaultCacheManager().getSingleFile(responseBody);
+            await DefaultCacheManager().getSingleFile(url);
         if (cachedLatestAPOD != null) {
           var cachedInfo = await cachedLatestAPOD.readAsString();
           Map cachedMap = jsonDecode(cachedInfo);
