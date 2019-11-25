@@ -14,6 +14,31 @@ class RestRequest {
   String date = formatDate(DateTime.now(), [yyyy, '-', mm, '-', dd]).toString();
   String cacheURI = "LatestApod";
 
+// Caching works somehow
+// TODO: Clean this shit
+// Seperate the functions which can be broken down
+  String updateURL(String date) {
+    String updatedURL =
+        "https://api.nasa.gov/planetary/apod?api_key=$apiKey&date=$date";
+    return updatedURL;
+  }
+
+  APOD constructAPOD(String jsonString) {
+    Map apodMap = jsonDecode(jsonString);
+    APOD apod = new APOD.fromJson(apodMap);
+    return apod;
+  }
+
+  Future constructPrevAPOD() async {
+    date = formatDate(DateTime.now().subtract(new Duration(days: 1)),
+        [yyyy, '-', mm, '-', dd]);
+    var cachedApod =
+        await DefaultCacheManager().getFileFromCache(updateURL(date));
+    var stringApod = await cachedApod.file.readAsString();
+    APOD apod = constructAPOD(stringApod);
+    return apod;
+  }
+
   Future<http.Response> getApod(String url) async {
     try {
       return await http.get(url);
@@ -22,45 +47,41 @@ class RestRequest {
       return null;
     }
   }
-  
-
 
 //TODO: Should it be a client or not
+// this first needs to check if there is a cache data in the given date
+// if there is none, fetch new data from NASA
   Future<APOD> requestAPOD() async {
-    String url =
-        "https://api.nasa.gov/planetary/apod?api_key=$apiKey&date=$date";
-    print("Date:$date");
-    var response = await getApod(url);
-    if (response != null) {
-      String responseBody = response.body;
-      if (response.statusCode == 200) {
-        var y = await DefaultCacheManager().getSingleFile(url);        
-        print(y.readAsString());
-        print("Trying to read from cache$z");
-        Map apodMap = jsonDecode(responseBody);
-        APOD apod = new APOD.fromJson(apodMap);
-        print("Response Status: ${response.statusCode}");
-        print("Response Body: $responseBody");
-        return apod;
-      } else {
-        var cachedLatestAPOD =
-            await DefaultCacheManager().getSingleFile(url);
-        if (cachedLatestAPOD != null) {
-          var cachedInfo = await cachedLatestAPOD.readAsString();
-          Map cachedMap = jsonDecode(cachedInfo);
-          APOD apod = new APOD.fromJson(cachedMap);
-          print('From Cached data ${apod.explanation}');
-          return apod;
+    String url = updateURL(date);
+    var getPhotoData = await DefaultCacheManager().getFileFromCache(url);
+    APOD returningApod;
+
+    if (getPhotoData == null) {
+      //HTTP Request
+      var response = await getApod(url);
+      if (response != null) {
+        String responseBody = response.body;
+        if (response.statusCode == 200) // means ok Data is captured
+        {
+          var cached = await DefaultCacheManager()
+              .downloadFile(url); // download the files
+          //Show where the cache is being stored for debugging purposes
+          print('Cache Path: ${cached.file.path}');
+          APOD apod = constructAPOD(responseBody);
+          returningApod = apod;
         } else {
-          throw Exception("NO APOD AVAILABLE");
+          APOD apod = await constructPrevAPOD();
+          returningApod = apod;
         }
       }
+    } else if (getPhotoData != null) {
+      String photoString = await getPhotoData.file.readAsString();
+      APOD apod = constructAPOD(photoString);
+      returningApod = apod;
     } else {
-      var cachedAPOD = await DefaultCacheManager().getSingleFile(cacheURI);
-      var x = await cachedAPOD.readAsString();
-      print(x);
-      return APOD();
+      returningApod = null;
     }
+    return returningApod;
   }
 
   static void testDates() {
