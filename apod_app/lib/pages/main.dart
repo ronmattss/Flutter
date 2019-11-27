@@ -62,7 +62,7 @@ class _MainScreenState extends State<MainScreen>
 
   Widget _buildAPODList(BuildContext context) {
     return FutureBuilder<List<APOD>>(
-      future: apodList,
+      future: rr.requestTenAPOD(),
       builder: (context, snapshot) {
         if (snapshot.hasData == true) {
           Size size = MediaQuery.of(context).size;
@@ -136,7 +136,7 @@ class _MainScreenState extends State<MainScreen>
           Column(
             children: <Widget>[
               _buildApod(context),
-           //   _buildAPODList(context)
+              _buildAPODList(context)
               // SizedBox(height: 300, child: _buildCardFuture(context)),
             ],
           ),

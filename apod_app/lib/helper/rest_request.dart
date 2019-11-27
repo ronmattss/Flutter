@@ -48,9 +48,9 @@ class RestRequest {
     }
   }
 
-//TODO: Should it be a client or not
-// this first needs to check if there is a cache data in the given date
+// this first needs to check if there is a cached data in the given date
 // if there is none, fetch new data from NASA
+//TODO: cached previous date if today is not available
   Future<APOD> requestAPOD() async {
     String url = updateURL(date);
     var getPhotoData = await DefaultCacheManager().getFileFromCache(url);
@@ -97,16 +97,24 @@ class RestRequest {
       String previousDays = formatDate(
           DateTime.now().subtract(new Duration(days: i)),
           [yyyy, '-', mm, '-', dd]);
-      String url =
-          "https://api.nasa.gov/planetary/apod?api_key=$apiKey&date=$previousDays";
+      String url = updateURL(previousDays);
+      // check cached Data if anything is stored
+      // else retrieve from NASA
+      var cachedData = await DefaultCacheManager().getFileFromCache(url);
 
-      var response = await http.get(url);
-      if (response.statusCode == 200) {
-        Map apodMapList = jsonDecode(response.body);
-        tenPhotos.add(new APOD.fromJson(apodMapList));
-        print(tenPhotos.last.date);
-      } else {
-        continue;
+      if (cachedData == null) {
+        var response = await getApod(url);
+        if (response.statusCode == 200) {
+          DefaultCacheManager().downloadFile(url);
+          tenPhotos.add(constructAPOD(response.body));
+          print(tenPhotos.last.date);
+        } else {
+          continue;
+        }
+      } else if (cachedData != null) {
+        print("Loading from cache: $i");
+        String cachedJSON = await cachedData.file.readAsString();
+        tenPhotos.add(constructAPOD(cachedJSON));
       }
     }
     return tenPhotos;
